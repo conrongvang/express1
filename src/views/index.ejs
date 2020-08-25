@@ -1,0 +1,44 @@
+<%- include('../layouts/common') -%>
+<div class="container pt-5">
+    <h1>Users</h1>
+    <div class="d-flex align-items-center">
+        <a class="btn btn-primary mb-auto" href="/users/create">New</a>
+        <form action="/users/search" method="GET" class="d-flex ml-auto">
+            <input id="search-users" name="q" type="text" class="form-control"/>
+            <button class="btn btn-primary ml-2">Search</button>
+        </form>
+    </div>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+        </tr>
+        <% users.forEach(function(user){ %>
+            <tr>
+                <td><%=user.name%></td>
+                <td><%=user.phone%></td>
+                <td>
+                    <a href="/users/<%=user.id%>">View</a>
+                    <!-- <form method="PUT" action="/users/edit/">
+                        <a href="/users/edit/<%=user.id%>">Edit</a>
+                    </form>
+                    <form method="POST" action="/users/delete/">
+                        <button>Delete</button>
+                    </form> -->
+                </td>
+            </tr>
+        <% }); %>
+    </table>
+</div>
+
+<script>
+    //This script used to save value of input after click button or reload page
+    let input = document.getElementById('search-users');
+    input.addEventListener('change', updateSessionStorage);         //Add event named 'change' and update within sessionStorage
+    function updateSessionStorage(){
+        sessionStorage.setItem('draft', input.value);               //Pass value of input for sessionStorage named 'draft'
+    }
+    input.value = sessionStorage.getItem('draft');                  //Pass reverse item of sessionStorage named 'draft' for value of input
+</script>
+
+<%- include('../layouts/footer') -%>

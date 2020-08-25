@@ -1,0 +1,72 @@
+<%- include('../layouts/common') -%>
+<div class="container pt-5">
+  <h1>Products</h1>
+  <div class="d-flex align-items-center">
+    <a class="btn btn-primary mb-auto" href="/products/create">New</a>
+    <form action="/products/search" method="GET" class="d-flex ml-auto">
+        <input id="search-products" name="q" type="text" class="form-control"/>
+        <button class="btn btn-primary ml-2">Search</button>
+    </form>
+  </div>
+  <div class="row">
+    <% products.forEach((product) => { %>
+      <div class="col-sm">
+        <%=product.name;%> <br>
+        <img src="<%=product.image;%>"/> <br>
+        <%=product.description;%> <br>
+        <%=product.price;%> <br>
+      </div>
+    <% }); %>
+  </div>
+
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      <a class="page-link" href="/products?page=<%=firstPage%>" aria-label="Previous">
+        <span aria-hidden="true">First</span>
+      </a>
+      <li class="page-item">
+        <a class="page-link" href="/products?page=<%=previousPage%>" aria-label="First">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <%  for(let j=page; j<page+3; j++) {
+            if(j<=lastPage) { %>
+              <li class="page-item">
+                <a id="query_string" class="page-link" href="">
+                  <%=j%>
+                </a>
+              </li>
+            <% }
+      } %>
+      <li class="page-item">
+        <a class="page-link" href="" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+      <a class="page-link" href="/products?page=<%=lastPage%>" aria-label="Last">
+        <span aria-hidden="true">Last</span>
+      </a>
+    </ul>
+  </nav>
+</div>
+
+<script>
+  if(window.location.pathname.search("/search")) {
+    document.getElementById("query_string").getElementsByTagName("href").innerHTML = "/products/search?q=<%=q%>&page=<%=nextPage%>";
+  }
+  else {
+    document.getElementById("query_string").getElementsByTagName("href").innerHTML = "/products?page=<%=nextPage%>";
+  }
+</script>
+
+<script>
+  //This script used to save value of input after click button or reload page
+  let input = document.getElementById('search-products');
+  input.addEventListener('change', updateSessionStorage);         //Add event named 'change' and update within sessionStorage
+  function updateSessionStorage(){
+      sessionStorage.setItem('draft', input.value);               //Pass value of input for sessionStorage named 'draft'
+  }
+  input.value = sessionStorage.getItem('draft');                  //Pass reverse item of sessionStorage named 'draft' for value of input
+</script>
+
+<%- include('../layouts/footer') -%>
